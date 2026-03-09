@@ -110,6 +110,25 @@
               </p>
             </div>
 
+            <!-- Client ID Input -->
+            <div class="mb-4">
+              <label
+                class="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300"
+              >
+                <Icon name="key" size="sm" class="text-blue-500" />
+                Client ID
+              </label>
+              <input
+                v-model="refreshTokenClientId"
+                type="text"
+                class="input w-full font-mono text-sm"
+                placeholder="app_EMoamEEZ73f0CkXaXp7hrann"
+              />
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                OAuth Client ID，默认使用 Codex CLI 内置值
+              </p>
+            </div>
+
             <!-- Error Message -->
             <div
               v-if="error"
@@ -786,7 +805,7 @@ const emit = defineEmits<{
   'generate-url': []
   'exchange-code': [code: string]
   'cookie-auth': [sessionKey: string]
-  'validate-refresh-token': [refreshToken: string]
+  'validate-refresh-token': [refreshToken: string, clientId: string]
   'validate-session-token': [sessionToken: string]
   'import-access-token': [accessToken: string]
   'update:inputMethod': [method: AuthInputMethod]
@@ -827,6 +846,7 @@ const inputMethod = ref<AuthInputMethod>(props.showCookieOption ? 'manual' : 'ma
 const authCodeInput = ref('')
 const sessionKeyInput = ref('')
 const refreshTokenInput = ref('')
+const refreshTokenClientId = ref('app_EMoamEEZ73f0CkXaXp7hrann')
 const sessionTokenInput = ref('')
 const accessTokenInput = ref('')
 const showHelpDialog = ref(false)
@@ -945,7 +965,7 @@ const handleCookieAuth = () => {
 
 const handleValidateRefreshToken = () => {
   if (refreshTokenInput.value.trim()) {
-    emit('validate-refresh-token', refreshTokenInput.value.trim())
+    emit('validate-refresh-token', refreshTokenInput.value.trim(), refreshTokenClientId.value.trim())
   }
 }
 

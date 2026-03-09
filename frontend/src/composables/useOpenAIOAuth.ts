@@ -128,7 +128,8 @@ export function useOpenAIOAuth(options?: UseOpenAIOAuthOptions) {
   // Validate refresh token and get full token info
   const validateRefreshToken = async (
     refreshToken: string,
-    proxyId?: number | null
+    proxyId?: number | null,
+    clientId?: string
   ): Promise<OpenAITokenInfo | null> => {
     if (!refreshToken.trim()) {
       error.value = 'Missing refresh token'
@@ -143,7 +144,8 @@ export function useOpenAIOAuth(options?: UseOpenAIOAuthOptions) {
       const tokenInfo = await adminAPI.accounts.refreshOpenAIToken(
         refreshToken.trim(),
         proxyId,
-        `${endpointPrefix}/refresh-token`
+        `${endpointPrefix}/refresh-token`,
+        clientId
       )
       return tokenInfo as OpenAITokenInfo
     } catch (err: any) {

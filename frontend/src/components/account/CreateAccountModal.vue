@@ -3678,9 +3678,9 @@ const handleGenerateUrl = async () => {
   }
 }
 
-const handleValidateRefreshToken = (rt: string) => {
+const handleValidateRefreshToken = (rt: string, clientId?: string) => {
   if (form.platform === 'openai' || form.platform === 'sora') {
-    handleOpenAIValidateRT(rt)
+    handleOpenAIValidateRT(rt, clientId)
   } else if (form.platform === 'antigravity') {
     handleAntigravityValidateRT(rt)
   }
@@ -3924,7 +3924,7 @@ const handleOpenAIExchange = async (authCode: string) => {
 }
 
 // OpenAI 手动 RT 批量验证和创建
-const handleOpenAIValidateRT = async (refreshTokenInput: string) => {
+const handleOpenAIValidateRT = async (refreshTokenInput: string, clientId?: string) => {
   const oauthClient = activeOpenAIOAuth.value
   if (!refreshTokenInput.trim()) return
 
@@ -3953,7 +3953,8 @@ const handleOpenAIValidateRT = async (refreshTokenInput: string) => {
       try {
         const tokenInfo = await oauthClient.validateRefreshToken(
           refreshTokens[i],
-          form.proxy_id
+          form.proxy_id,
+          clientId
         )
         if (!tokenInfo) {
           failedCount++
